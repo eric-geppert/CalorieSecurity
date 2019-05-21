@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-            System.out.println("(attempt authentication) made it");
+            System.out.println("attempting authentication");
             PlayerCredentials credentials = new ObjectMapper()
                     .readValue(request.getInputStream(), PlayerCredentials.class);
 //            System.out.println(credentials); // need?
@@ -51,12 +51,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        System.out.println("successful authentication: creating token");
         String token = JWT.create()
                 .withSubject(((User) authResult.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) //Exp_time defined in constants
                 .sign(HMAC512(SECRET.getBytes()));
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
-        System.out.println("token: "+ token);
+        System.out.println("token: "+ token); //take outttt
     }
 }

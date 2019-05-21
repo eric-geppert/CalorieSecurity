@@ -20,6 +20,7 @@ public class RegistrationController {
 
     @PostMapping(value = "/")
     public boolean registerPlayer(@RequestBody PlayerCredentials playerCredentials) {
+        System.out.println("playerCredentials: " + playerCredentials);
         return registrationService.registerPlayer(playerCredentials);
     }
 }

@@ -36,7 +36,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
                 .antMatchers("/api/v0/published-update/**").permitAll()
 //                .antMatchers("/calorie/published-update/**").permitAll()
-                .antMatchers("/calorie/addCalEntry/**").permitAll()
+//                .antMatchers("/calorie/addCalEntry/**").permitAll() //only want to permit new users after that add things as self
 //                .antMatchers("/calorie/register").permitAll()
 
                 .anyRequest().authenticated()

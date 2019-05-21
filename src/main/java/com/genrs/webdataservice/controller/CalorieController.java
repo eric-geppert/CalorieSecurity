@@ -32,6 +32,11 @@ public class CalorieController {
     //email: is null then I set it from the authentication
     @PostMapping(value = "/addCalEntry")
     public boolean addTodaysCalories(@RequestBody TodaysCalories todaysCalories, Authentication authentication) {
+        System.out.println("authentication: "+authentication);
+
+        System.out.println("todaysCalories: "+todaysCalories);
+        System.out.println("todaysCalories: "+todaysCalories);
+
         todaysCalories.setEmail(authentication.getName());
         return calorieRepository.addTodaysCalories(todaysCalories);
     }
@@ -47,9 +52,31 @@ public class CalorieController {
     public int getCalsFromLastXDays(@RequestBody int input,Authentication authentication) throws IOException {
         return calorieRepository.getCalsFromLastXDays(authentication.getName(), input);
     }
-
+//        example input (as json)
+//    {s
+//        "start": "2019-05-01",
+//            "end": "2019-05-09"
+//    }
     @GetMapping(value = "/getEntriesBetween")
     public List<TodaysCalories> getEntriesBetween(@RequestBody String input,Authentication authentication) throws IOException {
+        String date1 =objectMapper.readTree(input).get("start").asText();
+        String date2 =objectMapper.readTree(input).get("end").asText();
+
+        LocalDate start = LocalDate.parse(date1);
+        System.out.println("start: "+ start);
+        LocalDate end = LocalDate.parse(date2);
+        System.out.println("end: "+ end);
+
+        return statisticsService.getEntriesBetween(authentication.getName(),start, end);
+    }
+
+//        example input (as json)
+//    {s
+//        "start": "2019-05-01",
+//            "end": "2019-05-09"
+//    }
+    @PostMapping(value = "/getEntriesBetween")
+    public List<TodaysCalories> getEntriesBetweenWithPost(@RequestBody String input,Authentication authentication) throws IOException {
         String date1 =objectMapper.readTree(input).get("start").asText();
         String date2 =objectMapper.readTree(input).get("end").asText();
 
